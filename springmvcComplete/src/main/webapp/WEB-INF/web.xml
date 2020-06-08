@@ -6,14 +6,20 @@
     <display-name>Archetype Created Web Application</display-name>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
+        <param-value>
+            WEB-INF/applicationContext.xml
+            ,classpath:spring-shiro.xml
+        </param-value>
+    
     </context-param>
-    <welcome-file-list>
-        <welcome-file>login.html</welcome-file>
-    </welcome-file-list>
+    <!-- Session超时20分钟(零或负数表示会话永不超时) -->
+    <session-config>
+        <session-timeout>20</session-timeout>
+    </session-config>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -27,10 +33,26 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
+    <!--<servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.html</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
+    <filter>
+        <!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
+        <filter-name>shiroFilter</filter-name>
+        <!--DelegatingFilterProxy类是一个代理类，所有的请求都会首先发到这个filter代理，然后再按照"filter-name"委派到spring中的这个bean。-->
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <!--生命周期 缺省为false 设置"targetFilterLifecycle"为True，则spring来管理Filter.init()和Filter.destroy()；若为false，则这两个方法失效！！-->
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <!--放到其他filtermaping 之前保证shiro认证先执行-->
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -51,18 +73,16 @@
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <filter>
-        <filter-name>shiroFilter</filter-name>
-        <!--DelegatingFilterProxy类是一个代理类，所有的请求都会首先发到这个filter代理，然后再按照"filter-name"委派到spring中的这个bean。-->
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <!--生命周期 设置"targetFilterLifecycle"为True，则spring来管理Filter.init()和Filter.destroy()；若为false，则这两个方法失效！！-->
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>shiroFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/static/errorpage/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>405</error-code>
+        <location>/static/errorpage/405.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/static/errorpage/500.jsp</location>
+    </error-page>
 </web-app>

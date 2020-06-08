@@ -5,17 +5,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!--application.xml对应的是系统级别的配置，作用范围是系统上下文。-->
     <!--扫描控制器-->
-    <context:component-scan base-package="com.springmvccomplete.controller" />
-    <!--启用mvc注解驱动-->
-    <mvc:annotation-driven />
-    <!--静态资源映射-->
-    <mvc:resources mapping="static/**" location="static/" />
+    <context:component-scan base-package="com.springmvccomplete.common,com.springmvccomplete.controller" />
+    <!--启用sping注解-->
+    <context:annotation-config />
     <!--数据库连接配置-->
     <context:property-placeholder location="classpath:jdbc.properties" />
-    <!--视图解析器-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!--以/开头会从-->
-        <property name="prefix" value="static/page/" />
-        <property name="suffix" value=".html" />
-    </bean>
+    <!--启用mvc注解驱动-->
+    <mvc:annotation-driven />
+    <!-- 默认访问跳转到登录页面(即定义无需Controller的url<->view直接映射) -->
+    <!--<mvc:view-controller path="/" view-name="forward:/"/>-->
 </beans>

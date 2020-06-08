@@ -3,9 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     
+    <!--详细配置见 https://blog.csdn.net/jadyer/article/details/12208847-->
     <!--shiro 缓存管理器-->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="" />
+        <!--        <property name="cacheManagerConfigFile" value="" />-->
     </bean>
     <bean id="myrealm" class="com.springmvccomplete.config.ShiroRealm" />
     <!--权限管理器-->
@@ -18,28 +19,43 @@
         <!--装配权限管理器-->
         <property name="securityManager" ref="securityManager" />
         <!--登录地址-->
-        <property name="loginUrl" value="/login.html" />
+        <property name="loginUrl" value="static/login.html" />
         <!--登录成功后主页-->
         <property name="successUrl" value="static/page/main/main.html" />
         <!--无访问权限页面-->
-        <property name="unauthorizedUrl" value="nopermission.html" />
+        <property name="unauthorizedUrl" value="static/nopermission.html" />
         <!-- 具体配置需要拦截哪些 URL, 以及访问对应的 URL 时使用 Shiro 的什么 Filter 进行拦截.  -->
         <property name="filterChainDefinitions">
             <value>
-                /static/**=anon
-                <!--/admin.html=roles[admin]-->
+                <!-- anon：anon表示此地址不需要任何权限即可访问 -->
+                <!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器 -->
+                /page/**=authc
+                /**=anon
+<!--                /errorpage/**=anon-->
+<!--                /login.html=anon-->
+<!--                /nopermission.html=anon-->
+<!--                /image/**=anon-->
+<!--                /javascript/**=anon-->
+<!--                /css/**=anon-->
+<!--                /vcode=anon-->
+<!--                /**= authc,roles[user]&lt;!&ndash;表示要是user角色&ndash;&gt;-->
+                <!--
+                anon,authc,authcBasic,user是第一组认证过滤器
+                perms,port,rest,roles,ssl是第二组授权过滤器
+                /admin=authc,roles[admin]
+                表示用户必需已通过认证,并拥有admin角色才可以正常发起'/admin'请求
+                /edit=authc,perms[admin:edit]
+                表示用户必需已通过认证,并拥有admin:edit权限才可以正常发起'/edit'请求
+                /home=user
+                表示用户不一定需要已经通过认证,只需要曾经被Shiro记住过登录状态就可以正常发起'/home'请求
+               -->
                 <!-- anon表示此地址不需要任何权限即可访问 -->
                 <!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,如果未登录则跳到/login-->
-                <!--默认 放最后-->
-                /** = authc
-                <!--                ,urlPermissionsFilter-->
+                <!--/** = authc--><!--表示全部需要验证才能访问-->
             </value>
         </property>
     </bean>
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-    <!-- AOP式方法级权限检查 -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-          depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true" />
-    </bean>
+
 </beans>

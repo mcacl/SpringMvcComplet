@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="javascript/JQuery_v3.5.0.js"></script>
+    <script src="javascript/comjs.js"></script>
+</head>
+<body>
+<h4>登录</h4>
+<form method="post" action="../loginin">
+    <input type="text" name="n">
+    <input type="password" name="p">
+    <input type="text" name="code">
+    <input type="checkbox" name="remanberme" value="记住我">
+    <input type="submit" value="登录">
+</form>
+<img src="image/PGYLogo.png" alt="图片未找到"/>
+<img id="imgcode" src="" alt="验证码">
+</body>
+<script type="text/javascript">
+    $.ajax({
+        url: comjs.gethome() + "vcode",
+        dataType: "text",
+        success: function (data) {
+            if (!!data) {
+                $('#imgcode').attr('src', 'data:image/jpg;base64,' + data);
+            }
+        },
+        error: function (err) {
+
+        }
+    });
+</script>
+</html>
