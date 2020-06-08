@@ -1,7 +1,6 @@
 package com.springmvccomplete.tool;
 
 import com.springmvccomplete.tool.VerificationCode.VerifyCodeType;
-import junit.framework.JUnit4TestCaseFacade;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +9,6 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class VerificationCodeTest
 {
-
     @Test
     public void generateTextCode()
     {
