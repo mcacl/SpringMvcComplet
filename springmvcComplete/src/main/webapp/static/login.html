@@ -7,29 +7,66 @@
     <script src="javascript/comjs.js"></script>
 </head>
 <body>
-<h4>登录</h4>
-<form method="post" action="../loginin">
-    <input type="text" name="n">
-    <input type="password" name="p">
-    <input type="text" name="code">
-    <input type="checkbox" name="remanberme" value="记住我">
-    <input type="submit" value="登录">
+<form>
+    <input type="text" name="n" id="n">
+    <input type="password" name="p" id="p">
+    <input type="text" name="c" id="c">
+    <input type="checkbox" name="m" id="m"><label for="m">记住我</label>
+    <input type="button" onclick="login()" value="登录">
 </form>
 <img src="image/PGYLogo.png" alt="图片未找到"/>
 <img id="imgcode" src="" alt="验证码">
 </body>
 <script type="text/javascript">
-    $.ajax({
-        url: comjs.gethome() + "vcode",
-        dataType: "text",
-        success: function (data) {
-            if (!!data) {
-                $('#imgcode').attr('src', 'data:image/jpg;base64,' + data);
-            }
-        },
-        error: function (err) {
+    getcode();
 
+    function login() {
+        var n = $("#n").val();
+        var p = $("#p").val();
+        var c = $("#c").val();
+        var m = $("#m").prop('checked');
+        if (!n || !p) {
+            alert('登录信息填写错误！');
+            return;
         }
-    });
+        if (!c) {
+            alert("请填写验证码！");
+            return;
+        }
+        $.ajax({
+            url: comjs.gethome() + "/loginin",
+            method: 'post',
+            data: {'n': n, 'p': p, 'c': c, 'm': m},
+            dataType: "json",
+            async: false,
+            success: function (res) {
+                if (res.code == 1) {
+                    window.location.href = comjs.gethome() + "static/page/main/main.html";
+                } else {
+                    alert(res.msg);
+                    getcode();
+                }
+            },
+            error: function (err) {
+                alert(err.responseText);
+                getcode();
+            }
+        });
+    }
+
+    function getcode() {
+        $.ajax({
+            url: comjs.gethome() + "vcode",
+            dataType: "text",
+            success: function (data) {
+                if (!!data) {
+                    $('#imgcode').attr('src', 'data:image/jpg;base64,' + data);
+                }
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
 </script>
 </html>

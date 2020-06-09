@@ -19,6 +19,7 @@ public class ComException implements HandlerExceptionResolver
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e)
     {
         //错误统一处理
+        System.out.println(e.getMessage());
         return null;
     }
 }

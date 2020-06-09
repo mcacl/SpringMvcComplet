@@ -42,7 +42,6 @@ public class ShiroRealm extends AuthorizingRealm
         UsernamePasswordToken userinfo = (UsernamePasswordToken) authenticationToken;//强制转为用户密码信息
         if (userinfo.getUsername() != null)
         {
-            setSession("name", userinfo.getUsername());
             return new SimpleAuthenticationInfo(userinfo.getUsername(), userinfo.getPassword(), getName());
         } else
             //直接返回null的话,就会导致任何用户访问配置需要认证的资源都会自动跳转到unauthorizedUrl指定的地址

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 创建时间:2020/5/7
  * 创建人:pmc
- * 描述:
+ * 描述:验证码生成工具类
  */
 public class VerificationCode
 {

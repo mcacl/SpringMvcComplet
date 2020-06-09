@@ -10,7 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = {"classpath*:*.xml"})
+//@ContextConfiguration(locations = {"classpath*:*.xml"})
 public class VerificationCodeTest
 {
     @Test
