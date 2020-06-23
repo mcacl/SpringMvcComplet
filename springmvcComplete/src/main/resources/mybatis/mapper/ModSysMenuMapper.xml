@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springmvccomplete.dao.ModSysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.springmvccomplete.model.ModSysMenu">
+    <id column="menuid" jdbcType="INTEGER" property="menuid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="component" jdbcType="VARCHAR" property="component" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="enable" jdbcType="INTEGER" property="enable" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    menuid, name, component, icon, pid, sort, time, userid, enable, data, username
+  </sql>
+  <select id="select" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sysmenu
+    where 1=1
+    <if test="menuid!=null">
+        and menuid = #{menuid,jdbcType=INTEGER}
+    </if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from sysmenu
+    where menuid = #{menuid,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.springmvccomplete.model.ModSysMenu">
+    insert into sysmenu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuid != null">
+        menuid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="component != null">
+        component,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="enable != null">
+        enable,
+      </if>
+      <if test="data != null">
+        data,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuid != null">
+        #{menuid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="component != null">
+        #{component,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="data != null">
+        #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updatenonull" parameterType="com.springmvccomplete.model.ModSysMenu">
+    update sysmenu
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="component != null">
+        component = #{component,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null">
+        enable = #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="data != null">
+        data = #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where menuid = #{menuid,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="com.springmvccomplete.model.ModSysMenu">
+    update sysmenu
+    set name = #{name,jdbcType=VARCHAR},
+      component = #{component,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=INTEGER},
+      data = #{data,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR}
+    where menuid = #{menuid,jdbcType=INTEGER}
+  </update>
+</mapper>

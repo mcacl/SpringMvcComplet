@@ -1,5 +1,7 @@
 package com.springmvccomplete.config;
 
+import com.springmvccomplete.model.ModSysAuthority;
+import com.springmvccomplete.server.ImplServAuthority;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -8,6 +10,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +26,7 @@ public class ShiroRealm extends AuthorizingRealm
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection)
     {
+
         String currentuser = (String) super.getAvailablePrincipal(principalCollection);//当前登录用户的角色
         Set<String> jueseset = new HashSet<>();//角色
         Set<String> quanxianset = new HashSet<>();//权限
@@ -35,12 +39,24 @@ public class ShiroRealm extends AuthorizingRealm
         return info;
     }
 
-    //认证信息 调用时机为LoginController.login()方法中执行Subject.login()时
+    @Autowired
+    ImplServAuthority implServAuthority;
+
+    //登录认证信息 调用时机为LoginController.login()方法中执行Subject.login()时
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException
     {
         UsernamePasswordToken userinfo = (UsernamePasswordToken) authenticationToken;//强制转为用户密码信息
-        if (userinfo.getUsername() != null)
+        //数据库查询用户是否存在
+        ModSysAuthority user = implServAuthority.selectfirstornull(new ModSysAuthority());
+        try
+        {
+
+        } catch (Exception ex)
+        {
+            throw ex;
+        }
+        if (user != null)
         {
             return new SimpleAuthenticationInfo(userinfo.getUsername(), userinfo.getPassword(), getName());
         } else

@@ -1,7 +1,11 @@
 package com.springmvccomplete.controller;
 
+import com.springmvccomplete.common.BaseImpl;
+import com.springmvccomplete.model.ModSysAuthority;
+import com.springmvccomplete.server.ImplServAuthority;
 import com.springmvccomplete.tool.VerificationCode;
 import com.springmvccomplete.tool.VerificationCode.VerifyCodeType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,8 +22,22 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("main")
-public class CtrlMain
+public class CtrlMain extends Ctrl_BaseDao<ModSysAuthority>
 {
+    @Autowired
+    ImplServAuthority implServAuthority;
+
+    /**
+     * 初始化Ctrl接口的实现类
+     *
+     * @return BaseImpl
+     */
+    @Override
+    public BaseImpl setImpl()
+    {
+        return implServAuthority;
+    }
+
     @ResponseBody
     @RequestMapping(value = "data")
     public ResponseEntity<?> data()

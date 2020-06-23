@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!--application.xml对应的是系统级别的配置，作用范围是系统上下文。-->
     <!--扫描控制器-->
-    <context:component-scan base-package="com.springmvccomplete.common,com.springmvccomplete.controller" />
+    <context:component-scan base-package="com.springmvccomplete.common,com.springmvccomplete.controller,com.springmvccomplete.server" />
     <!--启用sping注解-->
     <context:annotation-config />
     <!--数据库连接配置-->
@@ -14,4 +14,25 @@
     <mvc:annotation-driven />
     <!-- 默认访问跳转到登录页面(即定义无需Controller的url<->view直接映射) -->
     <!--<mvc:view-controller path="/" view-name="forward:/"/>-->
+    <!--导入spring配置-->
+    <import resource="classpath:spring-*.xml" />
+    <!--事务-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!--事务注解-->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!--mybatis工厂类-->
+    <bean id="mybatisfactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!--<property name="configLocation" value="classpath:spring-mybatis.xml" />-->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="com.springmvccomplete.model"/>
+        
+    </bean>
+    <!--mybatis dao映射-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.springmvccomplete.dao" />
+        <property name="sqlSessionFactoryBeanName" value="mybatisfactory" />
+    </bean>
 </beans>

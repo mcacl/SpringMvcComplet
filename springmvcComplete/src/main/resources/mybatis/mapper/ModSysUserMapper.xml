@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springmvccomplete.dao.ModSysUserMapper">
+  <resultMap id="BaseResultMap" type="com.springmvccomplete.model.ModSysUser">
+    <id column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="latelogintime" jdbcType="TIMESTAMP" property="latelogintime" />
+    <result column="loginname" jdbcType="VARCHAR" property="loginname" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="islogin" jdbcType="INTEGER" property="islogin" />
+    <result column="pas" jdbcType="VARCHAR" property="pas" />
+    <result column="groupid" jdbcType="INTEGER" property="groupid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userid, name, sex, email, latelogintime, loginname, phone, islogin, pas, groupid
+  </sql>
+  <select id="select" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sysuser
+    where 1=1
+    <if test="userid!=null">
+        userid = #{userid,jdbcType=INTEGER}
+    </if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from sysuser
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.springmvccomplete.model.ModSysUser">
+    insert into sysuser
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="latelogintime != null">
+        latelogintime,
+      </if>
+      <if test="loginname != null">
+        loginname,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="islogin != null">
+        islogin,
+      </if>
+      <if test="pas != null">
+        pas,
+      </if>
+      <if test="groupid != null">
+        groupid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="latelogintime != null">
+        #{latelogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginname != null">
+        #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="islogin != null">
+        #{islogin,jdbcType=INTEGER},
+      </if>
+      <if test="pas != null">
+        #{pas,jdbcType=VARCHAR},
+      </if>
+      <if test="groupid != null">
+        #{groupid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updatenonull" parameterType="com.springmvccomplete.model.ModSysUser">
+    update sysuser
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="latelogintime != null">
+        latelogintime = #{latelogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginname != null">
+        loginname = #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="islogin != null">
+        islogin = #{islogin,jdbcType=INTEGER},
+      </if>
+      <if test="pas != null">
+        pas = #{pas,jdbcType=VARCHAR},
+      </if>
+      <if test="groupid != null">
+        groupid = #{groupid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="com.springmvccomplete.model.ModSysUser">
+    update sysuser
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      latelogintime = #{latelogintime,jdbcType=TIMESTAMP},
+      loginname = #{loginname,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      islogin = #{islogin,jdbcType=INTEGER},
+      pas = #{pas,jdbcType=VARCHAR},
+      groupid = #{groupid,jdbcType=INTEGER}
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>

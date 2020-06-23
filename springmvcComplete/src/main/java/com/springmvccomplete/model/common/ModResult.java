@@ -25,7 +25,7 @@ public class ModResult
     /**
      * 默认失败的构造方法
      *
-     * @param msg 错误消息
+     * @param msg  错误消息
      * @param data 数据
      */
     public ModResult(String msg, Object data)
@@ -36,7 +36,18 @@ public class ModResult
     }
 
     /**
+     * 设置默认状态的构造方法
+     *
+     * @param code 数据
+     */
+    public ModResult(Integer code)
+    {
+        this.code = code;
+    }
+
+    /**
      * 默认成功的构造方法
+     *
      * @param data 数据
      */
     public ModResult(Object data)

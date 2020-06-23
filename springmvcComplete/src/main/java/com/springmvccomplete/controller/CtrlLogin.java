@@ -1,5 +1,6 @@
 package com.springmvccomplete.controller;
 
+import com.springmvccomplete.common.IBaseCtrl;
 import com.springmvccomplete.model.common.ModResult;
 import com.springmvccomplete.tool.VerificationCode;
 import com.springmvccomplete.tool.VerificationCode.VerifyCodeType;
@@ -28,7 +29,7 @@ import java.util.Base64;
  * 描述:
  */
 @Controller
-public class CtrlLogin extends Ctrl_Base
+public class CtrlLogin implements IBaseCtrl
 {
     @ResponseBody
     @RequestMapping(value = "loginin", params = {"n", "p", "c"}, method = {RequestMethod.POST})
@@ -90,7 +91,7 @@ public class CtrlLogin extends Ctrl_Base
     }
 
     @RequestMapping("loginout")
-    public String loginout()
+    public String loginout(HttpServletRequest request)
     {
         SecurityUtils.getSubject().logout();
         return "redirect:static/login.html";
@@ -115,8 +116,8 @@ public class CtrlLogin extends Ctrl_Base
 
     @ResponseBody
     @RequestMapping("test")
-    public String test()
+    public String test(@RequestParam(required = false) String a, HttpServletRequest request)
     {
-        return "{\"d\":\"1\"}";
+        return "{\"d\":\"1\",\"a\":\"" + a + "\"}";
     }
 }

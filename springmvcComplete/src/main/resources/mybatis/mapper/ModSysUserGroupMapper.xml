@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springmvccomplete.dao.ModSysUserGroupMapper">
+  <resultMap id="BaseResultMap" type="com.springmvccomplete.model.ModSysUserGroup">
+    <id column="groupid" jdbcType="INTEGER" property="groupid" />
+    <result column="groupname" jdbcType="VARCHAR" property="groupname" />
+    <result column="menuid" jdbcType="VARCHAR" property="menuid" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="isuse" jdbcType="INTEGER" property="isuse" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    groupid, groupname, menuid, createtime, isuse
+  </sql>
+  <select id="select" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sysusergroup
+    where 1=1
+    <if test="groupid!=null">
+        groupid = #{groupid,jdbcType=INTEGER}
+    </if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from sysusergroup
+    where groupid = #{groupid,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.springmvccomplete.model.ModSysUserGroup">
+    insert into sysusergroup
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupid != null">
+        groupid,
+      </if>
+      <if test="groupname != null">
+        groupname,
+      </if>
+      <if test="menuid != null">
+        menuid,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="isuse != null">
+        isuse,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupid != null">
+        #{groupid,jdbcType=INTEGER},
+      </if>
+      <if test="groupname != null">
+        #{groupname,jdbcType=VARCHAR},
+      </if>
+      <if test="menuid != null">
+        #{menuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isuse != null">
+        #{isuse,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updatenonull" parameterType="com.springmvccomplete.model.ModSysUserGroup">
+    update sysusergroup
+    <set>
+      <if test="groupname != null">
+        groupname = #{groupname,jdbcType=VARCHAR},
+      </if>
+      <if test="menuid != null">
+        menuid = #{menuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isuse != null">
+        isuse = #{isuse,jdbcType=INTEGER},
+      </if>
+    </set>
+    where groupid = #{groupid,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="com.springmvccomplete.model.ModSysUserGroup">
+    update sysusergroup
+    set groupname = #{groupname,jdbcType=VARCHAR},
+      menuid = #{menuid,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      isuse = #{isuse,jdbcType=INTEGER}
+    where groupid = #{groupid,jdbcType=INTEGER}
+  </update>
+</mapper>

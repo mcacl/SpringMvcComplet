@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 创建时间:2020/6/8
  * 创建人:pmc
- * 描述:
+ * 描述:公共异常处理
  */
 @Component
 public class ComException implements HandlerExceptionResolver
