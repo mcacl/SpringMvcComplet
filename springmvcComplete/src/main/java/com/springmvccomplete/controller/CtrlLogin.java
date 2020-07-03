@@ -1,9 +1,15 @@
 package com.springmvccomplete.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.springmvccomplete.common.IBaseCtrl;
+import com.springmvccomplete.model.ModSysUser;
+import com.springmvccomplete.model.ViewMode.VModSysUser;
 import com.springmvccomplete.model.common.ModResult;
+import com.springmvccomplete.model.common.ModResult.ModResultCode;
 import com.springmvccomplete.tool.VerificationCode;
 import com.springmvccomplete.tool.VerificationCode.VerifyCodeType;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -28,13 +34,16 @@ import java.util.Base64;
  * 创建人:pmc
  * 描述:
  */
+@Api("登录类")
 @Controller
 public class CtrlLogin implements IBaseCtrl
 {
+    @ApiOperation(value = "登录接口")
     @ResponseBody
     @RequestMapping(value = "loginin", params = {"n", "p", "c"}, method = {RequestMethod.POST})
     public ModResult loginin(@RequestParam("n") String n, @RequestParam("p") String p, @RequestParam("c") String code, @RequestParam(value = "m", required = false) boolean remanber, HttpServletRequest request)
     {
+        modResultInit();//初始化返回实体
         String vcode = request.getSession().getAttribute("vcode").toString();
         System.out.println("验证码:输入:" + code + ",生成:" + vcode);
         if (StringUtils.isEmpty(code) || !StringUtils.equals(vcode.toUpperCase(), code.toUpperCase()))
@@ -75,14 +84,22 @@ public class CtrlLogin implements IBaseCtrl
         {
             //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
             System.out.println("对用户[" + n + "]进行登录验证..验证未通过,堆栈轨迹如下");
-            ae.printStackTrace();
             request.setAttribute("message_login", "用户名或密码不正确");
             modResult.setMsg("用户名或密码不正确");
         }
         if (curruser.isAuthenticated())
         {
-            modResult.setCode(1);
-            modResult.setData(token.getUsername());
+            try
+            {
+                ModSysUser tmoduser = (ModSysUser) curruser.getPrincipal();
+                String moduserstr = objectMapper.writeValueAsString(tmoduser);//数据模型转成视图模型
+                VModSysUser vModSysUser = objectMapper.readValue(moduserstr, VModSysUser.class);
+                modResult.setData(vModSysUser);
+                modResult.setCode(ModResultCode.Success);
+            } catch (JsonProcessingException e)
+            {
+                e.printStackTrace();
+            }
         } else
         {
             token.clear();
@@ -90,6 +107,7 @@ public class CtrlLogin implements IBaseCtrl
         return modResult;
     }
 
+    @ApiOperation(value = "退出接口")
     @RequestMapping("loginout")
     public String loginout(HttpServletRequest request)
     {
@@ -114,6 +132,7 @@ public class CtrlLogin implements IBaseCtrl
         return base64;
     }
 
+    @ApiOperation(value = "测试接口")
     @ResponseBody
     @RequestMapping("test")
     public String test(@RequestParam(required = false) String a, HttpServletRequest request)

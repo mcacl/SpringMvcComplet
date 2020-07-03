@@ -1,7 +1,7 @@
 package com.springmvccomplete.config;
 
-import com.springmvccomplete.model.ModSysAuthority;
-import com.springmvccomplete.server.ImplServAuthority;
+import com.springmvccomplete.model.ModSysUser;
+import com.springmvccomplete.server.ImplServSysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -26,7 +26,6 @@ public class ShiroRealm extends AuthorizingRealm
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection)
     {
-
         String currentuser = (String) super.getAvailablePrincipal(principalCollection);//当前登录用户的角色
         Set<String> jueseset = new HashSet<>();//角色
         Set<String> quanxianset = new HashSet<>();//权限
@@ -40,7 +39,7 @@ public class ShiroRealm extends AuthorizingRealm
     }
 
     @Autowired
-    ImplServAuthority implServAuthority;
+    ImplServSysUser implServSysUser;
 
     //登录认证信息 调用时机为LoginController.login()方法中执行Subject.login()时
     @Override
@@ -48,21 +47,31 @@ public class ShiroRealm extends AuthorizingRealm
     {
         UsernamePasswordToken userinfo = (UsernamePasswordToken) authenticationToken;//强制转为用户密码信息
         //数据库查询用户是否存在
-        ModSysAuthority user = implServAuthority.selectfirstornull(new ModSysAuthority());
+        ModSysUser user = null;
         try
         {
-
+            user = implServSysUser.selectlogin(userinfo.getUsername());
         } catch (Exception ex)
         {
             throw ex;
         }
-        if (user != null)
+        if (user == null)
         {
-            return new SimpleAuthenticationInfo(userinfo.getUsername(), userinfo.getPassword(), getName());
+            throw new UnknownAccountException();//账户不存在
+        } else if (user.getIslogin() != 1)
+        {
+            throw new LockedAccountException();//账户锁定
         } else
+        {
+            String tpas = new String(userinfo.getPassword());
+            if (!(user.getPas().equals(tpas)))
+            {
+                throw new IncorrectCredentialsException();//密码错误
+            }
+            return new SimpleAuthenticationInfo(user, userinfo.getPassword(), getName());
             //直接返回null的话,就会导致任何用户访问配置需要认证的资源都会自动跳转到unauthorizedUrl指定的地址
             //详见applicationContext.xml中的<bean id="shiroFilter">的配置
-            return null;
+        }
     }
 
     /**

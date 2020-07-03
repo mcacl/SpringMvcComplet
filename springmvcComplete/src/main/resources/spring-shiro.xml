@@ -14,31 +14,38 @@
         <property name="cacheManager" ref="cacheManager" />
         <property name="realm" ref="myrealm" />
     </bean>
+    <bean id="myFormFilter" class="com.springmvccomplete.config.ShiroMyFormFilter" />
     <!--shiro权限拦截器-->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <!--装配权限管理器-->
         <property name="securityManager" ref="securityManager" />
         <!--登录地址-->
-        <property name="loginUrl" value="static/login.html" />
+        <property name="loginUrl" value="/static/login.html" />
         <!--登录成功后主页-->
-        <property name="successUrl" value="static/page/main/main.html" />
+        <property name="successUrl" value="/static/page/main/main.html" />
         <!--无访问权限页面-->
-        <property name="unauthorizedUrl" value="static/nopermission.html" />
+        <property name="unauthorizedUrl" value="/static/nopermission.html" />
+        <!--使用自定义的-->
+        <property name="filters">
+            <map>
+                <entry key="authc" value-ref="myFormFilter" />
+            </map>
+        </property>
         <!-- 具体配置需要拦截哪些 URL, 以及访问对应的 URL 时使用 Shiro 的什么 Filter 进行拦截.  -->
         <property name="filterChainDefinitions">
             <value>
                 <!-- anon：anon表示此地址不需要任何权限即可访问 -->
                 <!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器 -->
-                /page/**=authc
+                /page/*=authc
                 /**=anon
-<!--                /errorpage/**=anon-->
-<!--                /login.html=anon-->
-<!--                /nopermission.html=anon-->
-<!--                /image/**=anon-->
-<!--                /javascript/**=anon-->
-<!--                /css/**=anon-->
-<!--                /vcode=anon-->
-<!--                /**= authc,roles[user]&lt;!&ndash;表示要是user角色&ndash;&gt;-->
+                <!--                /errorpage/**=anon-->
+                <!--                /login.html=anon-->
+                <!--                /nopermission.html=anon-->
+                <!--                /image/**=anon-->
+                <!--                /javascript/**=anon-->
+                <!--                /css/**=anon-->
+                <!--                /vcode=anon-->
+                <!--                /**= authc,roles[user]&lt;!&ndash;表示要是user角色&ndash;&gt;-->
                 <!--
                 anon,authc,authcBasic,user是第一组认证过滤器
                 perms,port,rest,roles,ssl是第二组授权过滤器

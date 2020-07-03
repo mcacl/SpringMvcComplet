@@ -5,7 +5,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!--application.xml对应的是系统级别的配置，作用范围是系统上下文。-->
     <!--扫描控制器-->
-    <context:component-scan base-package="com.springmvccomplete.common,com.springmvccomplete.controller,com.springmvccomplete.server" />
+    <context:component-scan
+            base-package="com.springmvccomplete.common,com.springmvccomplete.controller,com.springmvccomplete.server" />
     <!--启用sping注解-->
     <context:annotation-config />
     <!--数据库连接配置-->
@@ -26,13 +27,20 @@
     <bean id="mybatisfactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <!--<property name="configLocation" value="classpath:spring-mybatis.xml" />-->
-        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
-        <property name="typeAliasesPackage" value="com.springmvccomplete.model"/>
-        
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml" />
+        <property name="typeAliasesPackage" value="com.springmvccomplete.model" />
+    
     </bean>
     <!--mybatis dao映射-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.springmvccomplete.dao" />
         <property name="sqlSessionFactoryBeanName" value="mybatisfactory" />
     </bean>
+    <mvc:interceptors>
+        <!--登录拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/" />
+            <bean class="com.springmvccomplete.config.CheckInterceptior" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

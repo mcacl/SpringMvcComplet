@@ -34,14 +34,14 @@
             return;
         }
         $.ajax({
-            url: comjs.gethome() + "/loginin",
+            url: comjs.gethome() + "loginin",
             method: 'post',
             data: {'n': n, 'p': p, 'c': c, 'm': m},
             dataType: "json",
             async: false,
             success: function (res) {
                 if (res.code == 1) {
-                    window.location.href = comjs.gethome() + "static/page/main/main.html";
+                    //window.location.href = comjs.gethome() + "static/page/main/main.html";
                 } else {
                     alert(res.msg);
                     getcode();

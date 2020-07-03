@@ -7,15 +7,36 @@ package com.springmvccomplete.model.common;
  */
 public class ModResult
 {
-    private int code = -1;//默认失败
+    private ModResultCode code = ModResultCode.Failed;//默认失败
     private String msg;
     private Object data;
+
+    /**
+     * Code内部枚举
+     */
+    public enum ModResultCode
+    {
+        Success(1),//成功
+        Failed(-1);//失败
+
+        private int tcode;
+
+        private ModResultCode(int code)
+        {
+            this.tcode = code;
+        }
+
+        public int getTcode()
+        {
+            return tcode;
+        }
+    }
 
     public ModResult()
     {
     }
 
-    public ModResult(int code, String msg, Object data)
+    public ModResult(ModResultCode code, String msg, Object data)
     {
         this.code = code;
         this.msg = msg;
@@ -25,22 +46,32 @@ public class ModResult
     /**
      * 默认失败的构造方法
      *
-     * @param msg  错误消息
-     * @param data 数据
+     * @param msg 错误消息
      */
-    public ModResult(String msg, Object data)
+    public ModResult(String msg)
     {
-        this.code = -1;
+        this.code = ModResultCode.Failed;
         this.msg = msg;
-        this.data = data;
+    }
+
+    /**
+     * 无数据的返回
+     *
+     * @param code code
+     * @param msg  消息
+     */
+    public ModResult(ModResultCode code, String msg)
+    {
+        this.code = code;
+        this.msg = msg;
     }
 
     /**
      * 设置默认状态的构造方法
      *
-     * @param code 数据
+     * @param code code
      */
-    public ModResult(Integer code)
+    public ModResult(ModResultCode code)
     {
         this.code = code;
     }
@@ -49,10 +80,12 @@ public class ModResult
      * 默认成功的构造方法
      *
      * @param data 数据
+     * @param msg  消息
      */
-    public ModResult(Object data)
+    public ModResult(Object data, String msg)
     {
-        this.code = 1;
+        this.code = ModResultCode.Success;
+        this.msg = msg;
         this.data = data;
     }
 
@@ -61,7 +94,7 @@ public class ModResult
      */
     public int getCode()
     {
-        return code;
+        return code.getTcode();
     }
 
     /**
@@ -69,7 +102,7 @@ public class ModResult
      *
      * @param code
      */
-    public void setCode(int code)
+    public void setCode(ModResultCode code)
     {
         this.code = code;
     }

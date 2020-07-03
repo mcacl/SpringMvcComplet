@@ -25,6 +25,9 @@
         userid = #{userid,jdbcType=INTEGER}
     </if>
   </select>
+  <select id="selectlogin" parameterType="string" resultMap="BaseResultMap">
+  select * from sysuser where loginname=#{loginname} or email=#{loginname} or phone=#{loginname}
+</select>
   <delete id="delete" parameterType="java.lang.Integer">
     delete from sysuser
     where userid = #{userid,jdbcType=INTEGER}
